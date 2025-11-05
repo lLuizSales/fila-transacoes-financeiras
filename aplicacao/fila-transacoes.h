@@ -1,0 +1,33 @@
+#ifndef FILA_TRANSACOES_H
+#define FILA_TRANSACOES_H
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct{
+    
+    char nome[100];
+    int prioridade;                                                                                                                             
+    float valor;
+
+}  Transacao;
+
+typedef struct Elemento{
+    
+    Transacao dados;
+    struct Elemento *prox;
+
+} Elemento;
+
+typedef ELemento *Lista;
+
+Lista *criarLista();
+
+int insercaoOrdenada(Lista *li, Transacao nova_tran);
+
+int imprimirTransacoes(Lista *li);
+
+int exclusaoOrdenada(Transacao nova_tran);
+
+
+#endif
