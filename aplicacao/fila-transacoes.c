@@ -1,12 +1,12 @@
 #include "fila-transacoes.h"
 
-Lista *li criarLista(){
+Lista *criarLista(){
     
     Lista *li = (Lista *)malloc(sizeof(Lista));
 
     if(li != NULL){
 
-        (*li) = NULL
+        (*li) = NULL;
 
     }
 
@@ -15,6 +15,8 @@ Lista *li criarLista(){
 }
 
 int insercaoOrdenada(Lista *li, Transacao nova_tran){
+
+    
 
 }
 

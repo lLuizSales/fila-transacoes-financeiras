@@ -19,7 +19,7 @@ typedef struct Elemento{
 
 } Elemento;
 
-typedef ELemento *Lista;
+typedef Elemento *Lista;
 
 Lista *criarLista();
 
@@ -27,7 +27,6 @@ int insercaoOrdenada(Lista *li, Transacao nova_tran);
 
 int imprimirTransacoes(Lista *li);
 
-int exclusaoOrdenada(Transacao nova_tran);
-
+int exclusaoOrdenada(Lista *li);
 
 #endif
