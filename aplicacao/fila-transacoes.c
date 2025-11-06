@@ -19,11 +19,11 @@ Lista *criarLista(){
 
 }
 
-int insercaoOrdenada(Lista *li, Transacao nova_tran){
+int insercaoOrdenada(Lista *li, Operacao nova_op){
 
     Elemento *novo = (Elemento *)malloc(sizeof(Elemento));
 
-    novo->dados = nova_tran;
+    novo->dados = nova_op;
     novo->prox = NULL;
 
     if(li == NULL) return 0;
@@ -93,4 +93,4 @@ int imprimirFila(Lista *li){
     
     return 1;
 
-}
+}insercaoOrdenada(li, nova_tran);

@@ -10,11 +10,11 @@ typedef struct{
     int prioridade;                                                                                                                             
     float valor;
 
-}  Transacao;
+}  Operacao;
 
 typedef struct Elemento{
     
-    Transacao dados;
+    Operacao dados;
     struct Elemento *prox;
 
 } Elemento;
@@ -23,7 +23,7 @@ typedef Elemento *Lista;
 
 Lista *criarLista();
 
-int insercaoOrdenada(Lista *li, Transacao nova_tran);
+int insercaoOrdenada(Lista *li, Operacao nova_op);
 
 int imprimirFila(Lista *li);
 

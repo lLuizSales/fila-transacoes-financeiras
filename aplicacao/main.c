@@ -4,7 +4,7 @@ int main(){
 
     Lista *li = criarLista();
 
-    Transacao nova_tran;
+    Operacao nova_op;
 
     int opcao = 0;
 
@@ -24,20 +24,23 @@ int main(){
 
         if(opcao == 1){
 
-            printf("Nome: ");
-            scanf("%[^\n]", nova_tran.nome);
-            printf("Valor: ");
-            scanf("%f", &nova_tran.valor);
-            printf("Prioridade: ");
-            scanf("%d", &nova_tran.prioridade);
+            int t_opcao = 0;
+            
             /*printf("--Transferências disponíveis--\n");
             printf("1. Transferência imediata\n");
             pritnf("2. Transferência com valor > 10.000");
             pritnf("3. Transferência agendada");*/
 
-            insercaoOrdenada(li, nova_tran);
+        } else if(opcao == 2){
 
-        } else if(opcao == 2) {
+            printf("Nome: ");
+            scanf("%[^\n]", nova_op.nome);
+                        
+
+
+        } else if(opcao == 3){
+
+        } else if(opcao == 4){
 
             imprimirFila(li);
 
