@@ -3,14 +3,21 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+#ifdef _WIN32
+    #define LIMPAR_TELA "cls"
+#else
+    #define LIMPAR_TELA "clear"
+#endif
 
 typedef struct{
     
-    char nome[100];
-    int prioridade;                                                                                                                             
-    float valor;
+    char operacao[100];
+    int prioridade;
+    int id;                                                                                                                            
 
-}  Operacao;
+} Operacao;
 
 typedef struct Elemento{
     
@@ -30,5 +37,7 @@ int imprimirFila(Lista *li);
 int exclusaoOrdenada(Lista *li);
 
 void limpar_buffer();
+
+void menu();
 
 #endif

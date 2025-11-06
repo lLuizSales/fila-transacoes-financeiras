@@ -19,6 +19,17 @@ Lista *criarLista(){
 
 }
 
+void menu(){
+
+    printf("-----Operações Financeiras-----\n");
+    printf("1. Transferências\n");
+    printf("2. Consulta\n");
+    printf("3. Extrato do mês anterior\n");
+    printf("4. Imprimir fila\n");
+    printf("5. Sair\n");
+
+}
+
 int insercaoOrdenada(Lista *li, Operacao nova_op){
 
     Elemento *novo = (Elemento *)malloc(sizeof(Elemento));
@@ -38,7 +49,7 @@ int insercaoOrdenada(Lista *li, Operacao nova_op){
     Elemento *anterior = NULL;
     Elemento *atual = *li;
 
-    while(atual != NULL && novo->dados.prioridade < atual->dados.prioridade){
+    while(atual != NULL && novo->dados.prioridade <= atual->dados.prioridade){
 
         anterior = atual;
         atual = atual->prox;
@@ -73,19 +84,24 @@ int imprimirFila(Lista *li){
 
     if((*li) == NULL){
         
+        system(LIMPAR_TELA);
+
         printf("Nenhuma operação feita!\n");
+
+        printf("\nPressione <ENTER> para voltar ao menu de operações.");
+        getchar();
 
         return 1;
 
     }
 
     Elemento *atual = *li;
-    
+
+    printf("--------Operações--------\n\n");
+
     while(atual != NULL){
 
-        printf("Cliente: %s\n", atual->dados.nome);
-        printf("%.2f\n", atual->dados.valor);
-        printf("%d\n", atual->dados.prioridade);
+        printf("ID: %d | Operação: %s | Prioridade: %d |\n", atual->dados.id, atual->dados.operacao, atual->dados.prioridade);
 
         atual = atual->prox;
 
@@ -93,4 +109,4 @@ int imprimirFila(Lista *li){
     
     return 1;
 
-}insercaoOrdenada(li, nova_tran);
+}

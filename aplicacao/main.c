@@ -8,52 +8,91 @@ int main(){
 
     int opcao = 0;
 
+    nova_op.id = 0;
+
     do {
 
-        printf("1. Adicionar nova operação\n");
-        printf("2. Imprimir fila\n");
-        printf("3. Sair\n");
-        /*printf("-----Operações Financeiras-----\n");
-        printf("1. Transferências\n");
-        printf("2. Consulta\n");
-        printf("3. Extrato do mês anterior\n");
-        printf("4. Imprimir fila\n");
-        printf("5. Sair\n");*/
+        system(LIMPAR_TELA);
+        
+        menu();
         scanf("%d", &opcao);
         limpar_buffer();
 
         if(opcao == 1){
 
             int t_opcao = 0;
-            
-            /*printf("--Transferências disponíveis--\n");
+
+            system(LIMPAR_TELA);
+            printf("-----Transferências disponíveis-----\n");
             printf("1. Transferência imediata\n");
-            pritnf("2. Transferência com valor > 10.000");
-            pritnf("3. Transferência agendada");*/
+            printf("2. Transferência agendada\n");
+            scanf("%d", &t_opcao);
+
+            if(t_opcao == 1){
+
+                strcpy(nova_op.operacao, "Transferência imediata");
+                nova_op.prioridade = 4;
+                nova_op.id++;
+                insercaoOrdenada(li, nova_op);
+
+            } else if(t_opcao == 2){
+
+                strcpy(nova_op.operacao, "Transferência agendada");
+                nova_op.prioridade = 3;
+                nova_op.id++;
+                insercaoOrdenada(li, nova_op);
+
+            } else {
+
+                system(LIMPAR_TELA);
+
+                printf("Opção inexistente!\n");
+                
+                printf("\nPressione <ENTER> para voltar ao menu de operações.");
+                getchar();
+
+            }
 
         } else if(opcao == 2){
-
-            printf("Nome: ");
-            scanf("%[^\n]", nova_op.nome);
-                        
-
+            
+            strcpy(nova_op.operacao, "Consulta");
+            nova_op.prioridade = 2;
+            nova_op.id++;
+            insercaoOrdenada(li, nova_op);
 
         } else if(opcao == 3){
 
-        } else if(opcao == 4){
+            strcpy(nova_op.operacao, "Extrato do mês anterior");
+            nova_op.prioridade = 1;
+            nova_op.id++;
+            insercaoOrdenada(li, nova_op);
 
+        } else if(opcao == 4){
+            
+            system(LIMPAR_TELA);
             imprimirFila(li);
+
+            printf("\nPressione <ENTER> para voltar ao menu de operações.");
+            getchar();
+
+        } else{
+
+            system(LIMPAR_TELA);
+
+            printf("Opção inexistente!\n");
+
+            printf("\nPressione <ENTER> para voltar ao menu de operações.");
+            getchar();
+
 
         }
 
+    } while(opcao != 5);
 
-
-        
-        
-
-        
-
-    } while(opcao != 3);
+    free(li);    
+    
+    system(LIMPAR_TELA);
+    printf("\nSaindo do programa...\n");
     
     return 1;
 }
