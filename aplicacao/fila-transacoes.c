@@ -1,5 +1,10 @@
 #include "fila-transacoes.h"
 
+void limpar_buffer(){
+    char c;
+    while((c = getchar()) != '\n' && c != EOF);
+}
+
 Lista *criarLista(){
     
     Lista *li = (Lista *)malloc(sizeof(Lista));
@@ -30,24 +35,27 @@ int insercaoOrdenada(Lista *li, Transacao nova_tran){
         return 1;
     }
 
+    Elemento *anterior = NULL;
     Elemento *atual = *li;
 
-    while(novo->dados.prioridade < atual->dados.prioridade){
+    while(atual != NULL && novo->dados.prioridade < atual->dados.prioridade){
 
+        anterior = atual;
         atual = atual->prox;
 
     }
 
-    if(atual->prox == NULL){
+    if(anterior == NULL){
 
-        atual->prox = novo;
+        novo->prox = *li;
+        *li = novo;       
 
         return 1;
 
-    } else if (atual->prox != NULL){
+    } else {
 
-        novo->prox = atual->prox;
-        atual->prox = novo;
+        novo->prox = atual;
+        anterior->prox = novo;
         
         return 1;
 
@@ -60,5 +68,29 @@ int exclusaoOrdenada(Lista *li){
 }
 
 int imprimirFila(Lista *li){
+    
+    if(li == NULL) return 0;
+
+    if((*li) == NULL){
+        
+        printf("Nenhuma operação feita!\n");
+
+        return 1;
+
+    }
+
+    Elemento *atual = *li;
+    
+    while(atual != NULL){
+
+        printf("Cliente: %s\n", atual->dados.nome);
+        printf("%.2f\n", atual->dados.valor);
+        printf("%d\n", atual->dados.prioridade);
+
+        atual = atual->prox;
+
+    }
+    
+    return 1;
 
 }

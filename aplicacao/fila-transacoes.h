@@ -25,8 +25,10 @@ Lista *criarLista();
 
 int insercaoOrdenada(Lista *li, Transacao nova_tran);
 
-int imprimirTransacoes(Lista *li);
+int imprimirFila(Lista *li);
 
 int exclusaoOrdenada(Lista *li);
+
+void limpar_buffer();
 
 #endif
