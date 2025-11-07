@@ -26,7 +26,8 @@ void menu(){
     printf("2. Consulta\n");
     printf("3. Extrato do mês anterior\n");
     printf("4. Imprimir fila\n");
-    printf("5. Sair\n");
+    printf("5. Processar Fila\n");
+    printf("6. Sair\n");
 
 }
 
@@ -74,7 +75,34 @@ int insercaoOrdenada(Lista *li, Operacao nova_op){
 
 }
 
-int exclusaoOrdenada(Lista *li){
+int processarFila(Lista *li){
+
+    if(*li == NULL){
+
+        system(LIMPAR_TELA);
+
+        printf("Nenhuma operação a ser processada!\n");
+
+        printf("\nPressione <ENTER> para voltar ao menu de operações.");
+        getchar();
+
+        return 1;
+    } 
+
+    Elemento *anterior = *li;
+
+    system(LIMPAR_TELA);
+
+    printf("--------Operação a ser processada--------\n");
+    printf("ID: %d | Operação: %s | Prioridade: %d |\n", anterior->dados.id, anterior->dados.operacao, anterior->dados.prioridade);
+
+    printf("\nPressione <ENTER> para voltar ao menu de operações.");
+    getchar();
+
+    *li = anterior->prox;
+
+    free(anterior);
+
 
 }
 
@@ -86,7 +114,7 @@ int imprimirFila(Lista *li){
         
         system(LIMPAR_TELA);
 
-        printf("Nenhuma operação feita!\n");
+        printf("Nenhuma operação requisitada!\n");
 
         printf("\nPressione <ENTER> para voltar ao menu de operações.");
         getchar();
@@ -97,6 +125,7 @@ int imprimirFila(Lista *li){
 
     Elemento *atual = *li;
 
+    system(LIMPAR_TELA);
     printf("--------Operações--------\n\n");
 
     while(atual != NULL){
@@ -106,6 +135,9 @@ int imprimirFila(Lista *li){
         atual = atual->prox;
 
     }
+
+    printf("\nPressione <ENTER> para voltar ao menu de operações.");
+    getchar();
     
     return 1;
 

@@ -34,7 +34,7 @@ int insercaoOrdenada(Lista *li, Operacao nova_op);
 
 int imprimirFila(Lista *li);
 
-int exclusaoOrdenada(Lista *li);
+int processarFila(Lista *li);
 
 void limpar_buffer();
 

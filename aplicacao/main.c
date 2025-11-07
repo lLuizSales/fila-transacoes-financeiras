@@ -69,13 +69,13 @@ int main(){
 
         } else if(opcao == 4){
             
-            system(LIMPAR_TELA);
             imprimirFila(li);
 
-            printf("\nPressione <ENTER> para voltar ao menu de operações.");
-            getchar();
+        } else if(opcao == 5){
 
-        } else{
+            processarFila(li);
+
+        } else if(opcao != 6){
 
             system(LIMPAR_TELA);
 
@@ -87,7 +87,7 @@ int main(){
 
         }
 
-    } while(opcao != 5);
+    } while(opcao != 6);
 
     free(li);    
     
