@@ -89,7 +89,7 @@ int main(){
 
     } while(opcao != 6);
 
-    free(li);    
+    liberarLista(li);    
     
     system(LIMPAR_TELA);
     printf("\nSaindo do programa...\n");
