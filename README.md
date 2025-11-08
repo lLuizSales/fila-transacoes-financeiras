@@ -1,4 +1,4 @@
-# Sistema de Fila de Transações Bancárias
+# Sistema de Fila de Operações Bancárias
 
 ## Integrantes
 - Luiz Eduardo de Sales Carneiro
