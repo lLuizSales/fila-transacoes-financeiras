@@ -13,7 +13,7 @@
 * **Tipo de operação** (consulta, transferência, etc.)
 * **Prioridade** (quanto maior o número, maior a urgência)
 
-### Aplicação Prática
+## Aplicação Prática
 Este projeto implementa um sistema de gerenciamento de operações financeiras em um banco, onde as transações são organizadas em uma fila de prioridades. O sistema permite:
 
 - **Transferências** (Imediatas - Alta Prioridade / Agendadas - Média Prioridade)
