@@ -24,12 +24,14 @@ As operações são processadas por ordem de prioridade, garantindo que transaç
 
 ## Estrutura do Projeto
 
+```bash
 fila-transacoes-financeiras/
 |--- aplicacao/
 |			|--- main.c
 |			|--- fila-transacoes.h
 |			|--- fila-transacoes.c
 |--- README.md
+```
 
 ## Compilação e Execução
 
