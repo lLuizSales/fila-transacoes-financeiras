@@ -2,7 +2,7 @@
 
 int main(){
 
-    Lista *li = criarLista();
+    Heap *h = criarHeap(10);
 
     Operacao nova_op;
 
@@ -33,14 +33,14 @@ int main(){
                 strcpy(nova_op.operacao, "Transferência imediata");
                 nova_op.prioridade = 4;
                 nova_op.id++;
-                insercaoOrdenada(li, nova_op);
+                inserirFila(h, nova_op);
 
             } else if(t_opcao == 2){
 
                 strcpy(nova_op.operacao, "Transferência agendada");
                 nova_op.prioridade = 3;
                 nova_op.id++;
-                insercaoOrdenada(li, nova_op);
+                inserirFila(h, nova_op);
 
             } else {
 
@@ -58,24 +58,51 @@ int main(){
             strcpy(nova_op.operacao, "Consulta");
             nova_op.prioridade = 2;
             nova_op.id++;
-            insercaoOrdenada(li, nova_op);
+            inserirFila(h, nova_op);
 
         } else if(opcao == 3){
 
             strcpy(nova_op.operacao, "Extrato do mês anterior");
             nova_op.prioridade = 1;
             nova_op.id++;
-            insercaoOrdenada(li, nova_op);
+            inserirFila(h, nova_op);
 
         } else if(opcao == 4){
             
-            imprimirFila(li);
+            imprimirFila(h);
 
         } else if(opcao == 5){
 
-            processarFila(li);
+            processarFila(h);
 
-        } else if(opcao != 6){
+        } else if(opcao == 6){
+            
+            system(LIMPAR_TELA);
+
+            int id = 0;
+            
+            printf("Digite um ID: ");
+            scanf("%d", &id);
+            limpar_buffer();
+
+            Operacao busca = buscaId(h, id);
+
+            if(busca.id != -1){
+
+                printf("--------Operação--------\n\n");
+                printf("ID: %d | Operação: %s | Prioridade: %d |\n", 
+                busca.id, busca.operacao, busca.prioridade);
+
+            } else{
+
+                printf("Operação não encontrada para o ID %d.\n", id);
+
+            }
+
+            printf("\nPressione <ENTER> para voltar ao menu de operações.");
+            getchar();
+
+        } else if(opcao != 7){
 
             system(LIMPAR_TELA);
 
@@ -87,9 +114,9 @@ int main(){
 
         }
 
-    } while(opcao != 6);
+    } while(opcao != 7);
 
-    liberarLista(li);    
+    liberarHeap(h);    
     
     system(LIMPAR_TELA);
     printf("\nSaindo do programa...\n");

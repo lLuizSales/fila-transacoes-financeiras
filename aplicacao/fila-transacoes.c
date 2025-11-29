@@ -13,17 +13,25 @@ void limpar_buffer(){
  * 
  * @return Lista * Ponteiro para a fila criada, ou NULL em caso de falha.
  */
-Lista *criarLista(){
+Heap *criarHeap(int n){
     
-    Lista *li = (Lista *)malloc(sizeof(Lista));
+    Heap* h = (Heap *)malloc(sizeof(Heap));
 
-    if(li != NULL){
+    if (h == NULL) return NULL;
+    
+    h->capacidade = (n > 0) ? n : 10;
+    h->tamanho = 0;
+    h->dados = (Operacao *)malloc(h->capacidade * sizeof(Operacao));
 
-        (*li) = NULL;
+    if (h->dados == NULL) {
+
+        free(h);
+
+        return NULL;
 
     }
 
-    return li;
+    return h;
 
 }
 
@@ -35,7 +43,8 @@ void menu(){
     printf("3. Extrato do mês anterior\n");
     printf("4. Imprimir fila\n");
     printf("5. Processar Fila\n");
-    printf("6. Sair\n");
+    printf("6. Buscar por ID\n");
+    printf("7. Sair\n");
 
 }
 
@@ -49,47 +58,27 @@ void menu(){
  * @param nova_op Estrutura com os dados da operação.
  * @return int Retorna 1 em caso de sucesso e 0 em caso de erro.
  */
-int insercaoOrdenada(Lista *li, Operacao nova_op){
+int inserirFila(Heap *h, Operacao nova_op){
 
-    Elemento *novo = (Elemento *)malloc(sizeof(Elemento));
+    if (h == NULL) return 0;
 
-    novo->dados = nova_op;
-    novo->prox = NULL;
-
-    if(li == NULL) return 0;
-
-    if((*li) == NULL){
-
-        *li = novo;
-
-        return 1;
-    }
-
-    Elemento *anterior = NULL;
-    Elemento *atual = *li;
-
-    while(atual != NULL && novo->dados.prioridade <= atual->dados.prioridade){
-
-        anterior = atual;
-        atual = atual->prox;
-
-    }
-
-    if(anterior == NULL){
-
-        novo->prox = *li;
-        *li = novo;       
-
-        return 1;
-
-    } else {
-
-        novo->prox = atual;
-        anterior->prox = novo;
+    
+    if (h->tamanho == h->capacidade) {
         
-        return 1;
-
+        h->capacidade *= 2;
+        
+        h->dados = (Operacao*)realloc(h->dados, h->capacidade * sizeof(Operacao));
+        
+        if (h->dados == NULL) return 0;
+    
     }
+
+    h->dados[h->tamanho] = nova_op;
+    
+    heapUp(h, h->tamanho);
+    
+    h->tamanho++;
+    return 1;
 
 }
 
@@ -101,34 +90,20 @@ int insercaoOrdenada(Lista *li, Operacao nova_op){
  * @param li Ponteiro para a lista.
  * @return int Retorna 1 se a remoção foi bem-sucedida, 0 se a fila estiver vazia ou for inválida.
  */
-int processarFila(Lista *li){
+Operacao processarFila(Heap *h){
 
-    if(*li == NULL){
+    Operacao operacao_vazia = {"N/A", -1, -1};
+    
+    if (h == NULL || h->tamanho == 0) return operacao_vazia;
+    
+    Operacao maior_p = h->dados[0];
 
-        system(LIMPAR_TELA);
+    h->dados[0] = h->dados[h->tamanho - 1];
+    h->tamanho--;
 
-        printf("Nenhuma operação a ser processada!\n");
+    heapDown(h, 0);
 
-        printf("\nPressione <ENTER> para voltar ao menu de operações.");
-        getchar();
-
-        return 1;
-    } 
-
-    Elemento *anterior = *li;
-
-    system(LIMPAR_TELA);
-
-    printf("--------Operação a ser processada--------\n");
-    printf("ID: %d | Operação: %s | Prioridade: %d |\n", anterior->dados.id, anterior->dados.operacao, anterior->dados.prioridade);
-
-    printf("\nPressione <ENTER> para voltar ao menu de operações.");
-    getchar();
-
-    *li = anterior->prox;
-
-    free(anterior);
-
+    return maior_p;
 
 }
 
@@ -139,40 +114,30 @@ int processarFila(Lista *li){
  * 
  * @param li Ponteiro para a lista.
  */
-int imprimirFila(Lista *li){
+void imprimirFila(Heap *h){
     
-    if(li == NULL) return 0;
-
-    if((*li) == NULL){
+    if(h == NULL || h->tamanho == 0){
         
-        system(LIMPAR_TELA);
-
-        printf("Nenhuma operação requisitada!\n");
+        printf("Nenhuma operacao requisitada!");
 
         printf("\nPressione <ENTER> para voltar ao menu de operações.");
         getchar();
 
-        return 1;
+        return;
 
     }
-
-    Elemento *atual = *li;
 
     system(LIMPAR_TELA);
     printf("--------Operações--------\n\n");
 
-    while(atual != NULL){
-
-        printf("ID: %d | Operação: %s | Prioridade: %d |\n", atual->dados.id, atual->dados.operacao, atual->dados.prioridade);
-
-        atual = atual->prox;
-
+    for (int i = 0; i < h->tamanho; i++) {
+        printf("Index %d | ID: %d | Operação: %s | Prioridade: %d |\n", i, 
+               h->dados[i].id, h->dados[i].operacao, h->dados[i].prioridade);
     }
+    printf("---------------------------\n");
 
     printf("\nPressione <ENTER> para voltar ao menu de operações.");
     getchar();
-    
-    return 1;
 
 }
 
@@ -184,21 +149,86 @@ int imprimirFila(Lista *li){
  * 
  * @param li Ponteiro para a lista a ser desalocada.
  */
-void liberarLista(Lista *li) {
+void liberarHeap(Heap *h) {
 
-    if (li != NULL) {
+    if(h != NULL){
 
-        Elemento *atual = *li;
-        Elemento *prox;
+        free(h->dados);
+        free(h);
 
-        while (atual != NULL) {
-
-            prox = atual->prox;  
-            free(atual);         
-            atual = prox;
-
-        }
-
-        free(li);
     }
+}
+
+void troca(Operacao *a, Operacao *b) {
+    
+    Operacao temp = *a;
+    *a = *b;
+    *b = temp;
+
+}
+
+void heapUp(Heap* h, int id) {
+
+    int pai = (id - 1) / 2;
+
+    if (id > 0 && h->dados[id].prioridade > h->dados[pai].prioridade) {
+        
+        troca(&h->dados[id], &h->dados[pai]);
+        
+        heapUp(h, pai);
+    
+    }
+
+}
+
+void heapDown(Heap* h, int id) {
+    
+    int maior = id;
+    int esquerda = 2 * id + 1;
+    int direita = 2 * id + 2;
+
+    if (esquerda < h->tamanho && h->dados[esquerda].prioridade > h->dados[maior].prioridade) {
+        
+        maior = esquerda;
+    
+    }
+
+    if (direita < h->tamanho && h->dados[direita].prioridade > h->dados[maior].prioridade) {
+        
+        maior = direita;
+    
+    }
+
+    if (maior != id) {
+        
+        troca(&h->dados[id], &h->dados[maior]);
+        
+        heapDown(h, maior);
+    
+    }
+
+}
+
+Operacao buscaId(Heap *h, int id) {
+
+    Operacao operacao_vazia = {"ID não encontrado", -1, -1};
+
+    if (h == NULL || h->tamanho == 0) {
+        
+        return operacao_vazia;
+    
+    }
+
+    for (int i = 0; i < h->tamanho; i++) {
+        
+        if (h->dados[i].id == id) {
+            
+            return h->dados[i]; 
+        
+        }
+    
+    }
+
+
+    return operacao_vazia;
 }

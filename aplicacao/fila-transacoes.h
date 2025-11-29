@@ -31,14 +31,12 @@ typedef struct{
  * 
  * Cada nó armazena uma operação e aponta para o próximo elemento da lista.
  */
-typedef struct Elemento{
+typedef struct{
     
-    Operacao dados;
-    struct Elemento *prox;
+    Operacao *dados;
+    int tamanho, capacidade;
 
-} Elemento;
-
-typedef Elemento *Lista;
+} Heap;
 
 /**
  * @brief Cria uma nova lista de transações financeiras.
@@ -47,7 +45,8 @@ typedef Elemento *Lista;
  * 
  * @return Lista * Ponteiro para a nova lista criada. Retorna NULL em caso de falha de alocação.
  */
-Lista *criarLista();
+
+Heap *criarHeap(int n);
 
 /**
  * @brief Insere uma nova operação na lista, respeitando a prioridade.
@@ -59,7 +58,7 @@ Lista *criarLista();
  * @param nova_op Estrutura contendo os dados da operação a ser inserida.
  * @return int Retorna 1 se a inserção foi bem-sucedida, ou 0 em caso de erro.
  */
-int insercaoOrdenada(Lista *li, Operacao nova_op);
+int inserirFila(Heap *h, Operacao nova_op);
 
 
 /**
@@ -70,7 +69,7 @@ int insercaoOrdenada(Lista *li, Operacao nova_op);
  * @param li Ponteiro para a lista de operações.
  * @return int Retorna 1 se a operação foi removida com sucesso, ou 0 se a lista estiver vazia.
  */
-int imprimirFila(Lista *li);
+void imprimirFila(Heap *h);
 
 /**
  * @brief Imprime todas as operações da lista.
@@ -80,7 +79,7 @@ int imprimirFila(Lista *li);
  * @param li Ponteiro para a fila.
  * @return int Retorna 1 se as operação foram impressas com sucesso, ou 0 se a lista não existir.
  */
-int processarFila(Lista *li);
+Operacao processarFila(Heap *h);
 
 /**
  * @brief Libera toda a memória utilizada pela lista.
@@ -89,7 +88,11 @@ int processarFila(Lista *li);
  * 
  * @param li Ponteiro para a lista.
  */
-void liberarLista(Lista *li);
+void liberarLista(Heap *h);
+
+void heapUp(Heap *h, int id);
+void heapDown(Heap *h, int id);
+void troca(Operacao *a, Operacao *b);
 
 void limpar_buffer();
 
