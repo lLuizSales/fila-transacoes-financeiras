@@ -4,6 +4,13 @@ int main(){
 
     Heap *h = criarHeap(10);
 
+    Pilha *p = criarPilha();
+
+    if (h == NULL || p == NULL) {
+        printf("Erro ao inicializar a Heap ou a Pilha.\n");
+        return 0;
+    }
+
     Operacao nova_op;
 
     int opcao = 0;
@@ -15,6 +22,7 @@ int main(){
         system(LIMPAR_TELA);
         
         menu();
+        printf("Escolha uma opção: ");
         scanf("%d", &opcao);
         limpar_buffer();
 
@@ -73,15 +81,60 @@ int main(){
 
         } else if(opcao == 5){
 
-            processarFila(h);
+            Operacao op_a_processar = processarFilaRetorno(h);
+            Operacao op_processada;
+            int sucesso = 0;
+
+            if (op_a_processar.id != -1) {
+                
+                sucesso = processarFila(h, &op_processada);
+
+                if (sucesso) {
+                    
+                    empilhar(p, op_processada);
+                    
+                    system(LIMPAR_TELA);
+                    printf("Sucesso! Operação processada:\n");
+                    printf("   ID: %d | Tipo: %s | Prioridade: %d | Status: %s \n", 
+                            op_processada.id, op_processada.operacao, op_processada.prioridade, op_processada.status);
+                }
+            }
+            
+            if (!sucesso) {
+                system(LIMPAR_TELA);
+                printf("A fila de operações está vazia. Não há nenhuma operação para processar.\n");
+            }
+            
+            printf("\nPressione <ENTER> para voltar ao menu de operações.");
+            getchar();
 
         } else if(opcao == 6){
+
+            system(LIMPAR_TELA);
+
+            int id_remover = 0;
+            printf("Digite o ID da operação a ser removida: ");
+            scanf("%d", &id_remover);
+            limpar_buffer();
+
+            if (removerID(h, id_remover)) {
+                system(LIMPAR_TELA);
+                printf("Operação com ID %d removida da fila.\n", id_remover);
+            } else {
+                system(LIMPAR_TELA);
+                printf("Erro! Operação com ID %d não encontrada ou a fila está vazia.\n", id_remover);
+            }
+
+            printf("\nPressione <ENTER> para voltar ao menu de operações.");
+            getchar();
+
+        } else if(opcao == 7){
             
             system(LIMPAR_TELA);
 
             int id = 0;
             
-            printf("Digite um ID: ");
+            printf("Digite um ID para a busca: ");
             scanf("%d", &id);
             limpar_buffer();
 
@@ -102,7 +155,29 @@ int main(){
             printf("\nPressione <ENTER> para voltar ao menu de operações.");
             getchar();
 
-        } else if(opcao != 7){
+        } else if(opcao == 8){
+
+            Operacao op_desfeita = desempilhar(p);
+
+            if (op_desfeita.id != -1) {
+                
+                if (inserirFila(h, op_desfeita)) {
+                    system(LIMPAR_TELA);
+                    printf("A operação '%s' (ID: %d) foi desfeita e retornou à fila com status PENDENTE.\n", 
+                            op_desfeita.operacao, op_desfeita.id);
+                } else {
+                    system(LIMPAR_TELA);
+                    printf("Erro ao reinserir a operação desfeita na fila.\n");
+                }
+            } else {
+                system(LIMPAR_TELA);
+                printf("A pilha de operações processadas está vazia. Não há nada para desfazer.\n");
+            }
+            
+            printf("\nPressione <ENTER> para voltar ao menu de operações.");
+            getchar();
+
+        } else if(opcao != 9){
 
             system(LIMPAR_TELA);
 
@@ -114,9 +189,10 @@ int main(){
 
         }
 
-    } while(opcao != 7);
+    } while(opcao != 9);
 
     liberarHeap(h);    
+    liberarPilha(p);
     
     system(LIMPAR_TELA);
     printf("\nSaindo do programa...\n");

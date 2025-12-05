@@ -11,6 +11,9 @@
     #define LIMPAR_TELA "clear"
 #endif
 
+#define STATUS_PENDENTE "PENDENTE"
+#define STATUS_PROCESSADA "PROCESSADA"
+#define STATUS_ERRO "ERRO"
 
 /**
  * @brief Estrutura que representa uma operação financeira.
@@ -21,10 +24,24 @@
 typedef struct{
     
     char operacao[100];
+    char status[20];
     int prioridade;
     int id;                                                                                                                            
 
 } Operacao;
+
+typedef struct NoPilha{
+    
+    Operacao dados;
+    struct NoPilha *proximo;
+
+} NoPilha;
+
+typedef struct Pilha{
+    
+    NoPilha *topo;
+
+} Pilha;
 
 /**
  * @brief Nó da lista de operações financeiras.
@@ -49,6 +66,13 @@ typedef struct{
 Heap *criarHeap(int n);
 
 /**
+ * @brief Cria uma nova pilha (utilizado para a função de edesfazer).
+ * 
+ * @return Pilha * Ponteiro para a nova pilha ou NULL em caso de falha.
+ */
+Pilha *criarPilha();
+
+/**
  * @brief Insere uma nova operação na lista, respeitando a prioridade.
  * 
  * A inserção é feita de forma ordenada, garantindo que operações com prioridade mais alta
@@ -60,6 +84,22 @@ Heap *criarHeap(int n);
  */
 int inserirFila(Heap *h, Operacao nova_op);
 
+/**
+ * @brief Adiciona uma operação processada no topo da pilha.
+ * 
+ * @param p Ponteiro para a Pilha.
+ * @param op Operação a ser empilhada.
+ * @return int Retorna 1 se o empilhamento foi bem-sucedido, ou 0 em caso de erro.
+ */
+int empilhar(Pilha *p, Operacao op);
+
+/**
+ * @brief Remove e retorna a operação do topo da pilha.
+ * 
+ * @param p Ponteiro para a Pilha.
+ * @return Operacao A operação removida, ou uma operação vazia em caso da pilha estar vazia.
+ */
+Operacao desempilhar(Pilha *p);
 
 /**
  * @brief Remove a operação com maior prioridade.
@@ -71,15 +111,18 @@ int inserirFila(Heap *h, Operacao nova_op);
  */
 void imprimirFila(Heap *h);
 
+Operacao processarFilaRetorno(Heap *h);
+
 /**
  * @brief Imprime todas as operações da lista.
  * 
  * Exibe o ID, a operação e a prioridade de cada item.
  * 
  * @param li Ponteiro para a fila.
+ * @param op_processada Ponteiro onde será armazenada a operação processada.
  * @return int Retorna 1 se as operação foram impressas com sucesso, ou 0 se a lista não existir.
  */
-Operacao processarFila(Heap *h);
+int processarFila(Heap *h, Operacao *op_processada);
 
 /**
  * @brief Libera toda a memória utilizada pela lista.
@@ -88,7 +131,22 @@ Operacao processarFila(Heap *h);
  * 
  * @param li Ponteiro para a lista.
  */
-void liberarLista(Heap *h);
+void liberarHeap(Heap *h);
+
+/**
+ * @brief Libera toda a memória utilizada pela pilha.
+ * 
+ *  @param p Ponteiro para a Pilha.
+ */
+void liberarPilha(Pilha *p);
+
+/**
+ * @brief Remove uma operação de qualquer posição com base no seu ID.
+ *  
+ * @param id ID da operação a ser removida.
+ * @return int Retorna 1 se a remoção foi bem-sucedida, ou 0 se o ID não foi encontrado ou a fila é inválida.
+ */
+int removerID(Heap *h, int id);
 
 void heapUp(Heap *h, int id);
 void heapDown(Heap *h, int id);
