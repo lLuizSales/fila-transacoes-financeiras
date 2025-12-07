@@ -6,6 +6,8 @@ int main(){
 
     Pilha *p = criarPilha();
 
+    Grafo* agencias = criar_grafo(10);
+
     if (h == NULL || p == NULL) {
         printf("Erro ao inicializar a Heap ou a Pilha.\n");
         return 0;
@@ -177,7 +179,22 @@ int main(){
             printf("\nPressione <ENTER> para voltar ao menu de operações.");
             getchar();
 
-        } else if(opcao != 9){
+        } else if(opcao == 9) {
+
+            int origem, destino;
+
+            printf("Digite a agência atual: ");
+            scanf("%d", &origem);
+
+            printf("Digite a agência destino: ");
+            scanf("%d", &destino);
+
+            encontrar_rota_bfs(agencias, origem, destino);
+
+            printf("\nPressione <ENTER> para continuar...");
+            getchar();
+
+        }   else if(opcao != 10){
 
             system(LIMPAR_TELA);
 
@@ -189,7 +206,7 @@ int main(){
 
         }
 
-    } while(opcao != 9);
+    } while(opcao != 10);
 
     liberarHeap(h);    
     liberarPilha(p);

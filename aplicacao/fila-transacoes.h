@@ -14,6 +14,17 @@
 #define STATUS_PENDENTE "PENDENTE"
 #define STATUS_PROCESSADA "PROCESSADA"
 #define STATUS_ERRO "ERRO"
+#define MAX_AGENCIAS 20
+
+typedef struct no {
+    int v;
+    struct no* prox;
+} No;
+
+typedef struct {
+    No* adj[MAX_AGENCIAS];
+    int num_vertices;
+} Grafo;
 
 /**
  * @brief Estrutura que representa uma operação financeira.
@@ -151,6 +162,11 @@ int removerID(Heap *h, int id);
 void heapUp(Heap *h, int id);
 void heapDown(Heap *h, int id);
 void troca(Operacao *a, Operacao *b);
+
+Grafo* criar_grafo(int n);
+void adicionar_aresta(Grafo* g, int origem, int destino);
+void imprimir_grafo(Grafo* g);
+void encontrar_rota_bfs(Grafo* g, int origem, int destino);
 
 void limpar_buffer();
 

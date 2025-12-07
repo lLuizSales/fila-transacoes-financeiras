@@ -63,7 +63,8 @@ void menu(){
     printf("6. Remover Operação por ID\n");
     printf("7. Buscar por ID\n");
     printf("8. Desfazer Última Operação Processada (Undo)\n");
-    printf("9. Sair\n");
+    printf("8. Encontrar rota entre agências\n");
+    printf("10. Sair\n");
 
 }
 
@@ -364,4 +365,92 @@ int removerID(Heap *h, int id) {
 
     return 1;
 
+}
+
+Grafo* criar_grafo(int n) {
+
+    Grafo* g = (Grafo*) malloc(sizeof(Grafo));
+
+    g->num_vertices = n;
+
+    for (int i = 0; i < n; i++)
+
+        g->adj[i] = NULL;
+
+    return g;
+
+}
+
+void adicionar_aresta(Grafo* g, int origem, int destino) {
+   
+    No* novo2 = malloc(sizeof(No));
+    No* novo1 = malloc(sizeof(No));
+    
+    novo1->v = destino;
+    novo1->prox = g->adj[origem];
+    g->adj[origem] = novo1;
+    
+    novo2->v = origem;
+    novo2->prox = g->adj[destino];
+    g->adj[destino] = novo2;
+
+}
+
+void encontrar_rota_bfs(Grafo* g, int origem, int destino) {
+
+    int fila[MAX_AGENCIAS];
+    int inicio = 0, fim = 0;
+    int visitado[MAX_AGENCIAS] = {0};
+    int pai[MAX_AGENCIAS];
+
+    for (int i = 0; i < MAX_AGENCIAS; i++)
+        pai[i] = -1;
+
+    fila[fim++] = origem;
+    visitado[origem] = 1;
+
+    while (inicio != fim) {
+
+        int atual = fila[inicio++];
+
+        if (atual == destino) break;
+
+        No* adj = g->adj[atual];
+
+        while (adj != NULL) {
+
+            if (!visitado[adj->v]) {
+
+                visitado[adj->v] = 1;
+                pai[adj->v] = atual;
+                fila[fim++] = adj->v;
+
+            }
+
+            adj = adj->prox;
+
+        }
+
+    }
+
+    if (!visitado[destino]) {
+
+        printf("\nNenhuma rota encontrada entre %d e %d.\n", origem, destino);
+
+        return;
+
+    }
+
+    printf("\nRota encontrada:\n");
+
+    int caminho[MAX_AGENCIAS];
+    int tam = 0;
+
+    for (int v = destino; v != -1; v = pai[v])
+        caminho[tam++] = v;
+
+    for (int i = tam - 1; i >= 0; i--)
+        printf("%d ", caminho[i]);
+
+    printf("\n");
 }
